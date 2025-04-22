@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cədvəl Pro</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="assets/manifest.json" /> <!-- "/manifest.json" yazısına diqqət et -->
+    <link rel="icon" href="assets/icon-192.png" sizes="192x192">
+    <link rel="icon" href="assets/icon-512.png" sizes="512x512">
+</head>
+
+<body>
+    <div class="container">
+        <label for="file-input" class="custom-file-upload">📁 Excel Faylını Seç</label>
+        <input type="file" id="file-input" style="display: none;" onchange="loadSchedule()" />
+
+        <!-- Burada xəbərdarlıq mesajı yazılacaq -->
+        <div id="error-message" class="error-message"></div>
+
+        <div id="current-date-time" class="datetime-box"></div>
+        <h3>Hazırkı Dərs: <span id="current-lesson"></span></h3>
+        <h3>Növbəti Dərs: <span id="next-lesson"></span></h3>
+        <h5>by Arzumanov Vahid</h5>
+    </div>
+
+    <script src="xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
