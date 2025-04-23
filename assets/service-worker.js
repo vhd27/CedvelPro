@@ -1,4 +1,3 @@
-// Service Worker yüklandıqda cache fayllarını saxlayacaq
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open('v1').then((cache) => {
@@ -7,6 +6,7 @@ self.addEventListener('install', (event) => {
                 '/CedvelPro/index.html',
                 '/CedvelPro/style.css',
                 '/CedvelPro/app.js',
+                '/CedvelPro/xlsx.full.min.js',
                 '/CedvelPro/assets/manifest.json',
                 '/CedvelPro/assets/icon-192.png',
                 '/CedvelPro/assets/icon-512.png'
@@ -15,16 +15,14 @@ self.addEventListener('install', (event) => {
     );
 });
 
-// Service Worker aktivləşdikdən sonra köhnə cache-i silirik (köhnəlmiş versiyanı)
 self.addEventListener('activate', (event) => {
-    const cacheWhitelist = ['v1']; // Yalnız 'v1' cache versiyasını saxlayacağıq
-
+    const cacheWhitelist = ['v1'];
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
                     if (!cacheWhitelist.includes(cacheName)) {
-                        return caches.delete(cacheName); // Köhnə cache-ləri silirik
+                        return caches.delete(cacheName);
                     }
                 })
             );
@@ -32,12 +30,15 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// Service Worker hər dəfə şəbəkə tələbi etdikdə cache-i yoxlayacaq
 self.addEventListener('fetch', (event) => {
+    if (event.request.method !== 'GET') return;
     event.respondWith(
         caches.match(event.request).then((cachedResponse) => {
-            // Cache-də varsa, onu qaytarırıq, yoxdursa şəbəkədən sorğu edirik
-            return cachedResponse || fetch(event.request);
+            return cachedResponse || fetch(event.request).catch(() => {
+                if (event.request.destination === 'document') {
+                    return caches.match('/CedvelPro/index.html');
+                }
+            });
         })
     );
 });

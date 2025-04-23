@@ -174,7 +174,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/assets/service-worker.js')
+        navigator.serviceWorker.register('/CedvelPro/assets/service-worker.js')
             .then((registration) => {
                 console.log('Service Worker uğurla qeydiyyatdan keçdi:', registration);
             })
